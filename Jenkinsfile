@@ -1,25 +1,21 @@
 pipeline {
     agent any
-
+    triggers {
+        pollSCM('H/5 * * * *')
+    }
     stages {
-
+        stage('Checkout') {
+            steps { checkout scm }
+        }
         stage('Build') {
-            steps {
-                echo 'Building application...'
-            }
+            steps { echo 'Building...' }
         }
-
         stage('Test') {
-            steps {
-                echo 'Running tests...'
-            }
+            steps { echo 'Testing...' }
         }
-
-        stage('Run Application') {
-            steps {
-                echo 'run application'
-                bat 'python app.py'
-            }    
-        }
+    }
+    post {
+        success { echo 'Build succeeded' }
+        failure { echo 'Build failed' }
     }
 }
